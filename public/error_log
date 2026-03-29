@@ -1,0 +1,28 @@
+[20-Dec-2025 08:26:51 UTC] PHP Fatal error:  Uncaught RuntimeException: A facade root has not been set. in /home/nexgroup/mechanix.nexgroup.biz/vendor/laravel/framework/src/Illuminate/Support/Facades/Facade.php:360
+Stack trace:
+#0 /home/nexgroup/mechanix.nexgroup.biz/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/RegisterErrorViewPaths.php(17): Illuminate\Support\Facades\Facade::__callStatic('replaceNamespac...', Array)
+#1 /home/nexgroup/mechanix.nexgroup.biz/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(947): Illuminate\Foundation\Exceptions\RegisterErrorViewPaths->__invoke()
+#2 /home/nexgroup/mechanix.nexgroup.biz/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(922): Illuminate\Foundation\Exceptions\Handler->registerErrorViewPaths()
+#3 /home/nexgroup/mechanix.nexgroup.biz/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(847): Illuminate\Foundation\Exceptions\Handler->renderHttpException(Object(Symfony\Component\HttpKernel\Exception\HttpException))
+#4 /home/nexgroup/mechanix.nexgroup.biz/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(738): Illuminate\Foundation\Exceptions\Handler->prepareResponse(Object(Illuminate\Http\Request), Object(Symfony\Component\HttpKernel\Exception\HttpException))
+#5 /home/nexgroup/mechanix.nexgroup.biz/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(626): Illuminate\Foundation\Exceptions\Handler->renderExceptionResponse(Object(Illuminate\Http\Request), Object(Error))
+#6 /home/nexgroup/mechanix.nexgroup.biz/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(574): Illuminate\Foundation\Exceptions\Handler->render(Object(Illuminate\Http\Request), Object(Error))
+#7 /home/nexgroup/mechanix.nexgroup.biz/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(148): Illuminate\Foundation\Http\Kernel->renderException(Object(Illuminate\Http\Request), Object(Error))
+#8 /home/nexgroup/mechanix.nexgroup.biz/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(1220): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#9 /home/nexgroup/mechanix.nexgroup.biz/public/index.php(20): Illuminate\Foundation\Application->handleRequest(Object(Illuminate\Http\Request))
+#10 {main}
+  thrown in /home/nexgroup/mechanix.nexgroup.biz/vendor/laravel/framework/src/Illuminate/Support/Facades/Facade.php on line 360
+[20-Dec-2025 08:26:54 UTC] PHP Fatal error:  Uncaught RuntimeException: A facade root has not been set. in /home/nexgroup/mechanix.nexgroup.biz/vendor/laravel/framework/src/Illuminate/Support/Facades/Facade.php:360
+Stack trace:
+#0 /home/nexgroup/mechanix.nexgroup.biz/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/RegisterErrorViewPaths.php(17): Illuminate\Support\Facades\Facade::__callStatic('replaceNamespac...', Array)
+#1 /home/nexgroup/mechanix.nexgroup.biz/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(947): Illuminate\Foundation\Exceptions\RegisterErrorViewPaths->__invoke()
+#2 /home/nexgroup/mechanix.nexgroup.biz/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(922): Illuminate\Foundation\Exceptions\Handler->registerErrorViewPaths()
+#3 /home/nexgroup/mechanix.nexgroup.biz/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(847): Illuminate\Foundation\Exceptions\Handler->renderHttpException(Object(Symfony\Component\HttpKernel\Exception\HttpException))
+#4 /home/nexgroup/mechanix.nexgroup.biz/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(738): Illuminate\Foundation\Exceptions\Handler->prepareResponse(Object(Illuminate\Http\Request), Object(Symfony\Component\HttpKernel\Exception\HttpException))
+#5 /home/nexgroup/mechanix.nexgroup.biz/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(626): Illuminate\Foundation\Exceptions\Handler->renderExceptionResponse(Object(Illuminate\Http\Request), Object(Error))
+#6 /home/nexgroup/mechanix.nexgroup.biz/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(574): Illuminate\Foundation\Exceptions\Handler->render(Object(Illuminate\Http\Request), Object(Error))
+#7 /home/nexgroup/mechanix.nexgroup.biz/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(148): Illuminate\Foundation\Http\Kernel->renderException(Object(Illuminate\Http\Request), Object(Error))
+#8 /home/nexgroup/mechanix.nexgroup.biz/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(1220): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#9 /home/nexgroup/mechanix.nexgroup.biz/public/index.php(20): Illuminate\Foundation\Application->handleRequest(Object(Illuminate\Http\Request))
+#10 {main}
+  thrown in /home/nexgroup/mechanix.nexgroup.biz/vendor/laravel/framework/src/Illuminate/Support/Facades/Facade.php on line 360

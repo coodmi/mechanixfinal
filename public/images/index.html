@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MECHANIX | Interior Design Studio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;600&family=Syne:wght@400;700;800&display=swap"
+        rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        /* Custom Fonts & Utilities */
+        :root {
+            --color-dark: #0F0F0F;
+            --color-accent: #E63946;
+            /* Reddish tone for 'Mechanix' feel */
+            --color-light: #F5F5F0;
+        }
+
+        body {
+            font-family: 'Manrope', sans-serif;
+            background-color: var(--color-light);
+            color: var(--color-dark);
+            overflow-x: hidden;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        .font-display {
+            font-family: 'Syne', sans-serif;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--color-dark);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+        /* Animations */
+        .fade-up {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .fade-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .image-hover-zoom {
+            overflow: hidden;
+        }
+
+        .image-hover-zoom img {
+            transition: transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .image-hover-zoom:hover img {
+            transform: scale(1.05);
+        }
+
+        /* Menu Overlay */
+        #mobile-menu-overlay {
+            transition: transform 0.4s ease-in-out;
+        }
+
+        /* Input Styling for Contact Form */
+        .form-input {
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus {
+            box-shadow: 0 0 0 3px rgba(230, 57, 70, 0.5);
+            /* Accent color glow */
+            border-bottom-color: var(--color-accent) !important;
+        }
+
+        /* Modal Transitions */
+        .modal-hidden {
+            opacity: 0;
+            transform: scale(0.9);
+            pointer-events: none;
+        }
+
+        .modal-visible {
+            opacity: 1;
+            transform: scale(1);
+            pointer-events: auto;
+        }
+    </style>
+</head>
+
+<body class="antialiased selection:bg-red-200 selection:text-black">
+
+    <!-- Welcome Popup Modal -->
+    <div id="welcome-modal-overlay"
+        class="fixed inset-0 bg-black/70 z-[100] flex items-center justify-center transition-all duration-300 modal-hidden">
+        <!-- Modal Content -->
+        <div id="welcome-modal-content"
+            class="bg-white max-w-3xl w-[90%] rounded-xl shadow-2xl relative transform transition-all duration-500 delay-100 modal-hidden">
+
+            <!-- Close Button -->
+            <button id="close-modal-btn"
+                class="absolute top-4 right-4 text-gray-400 hover:text-[var(--color-dark)] transition-colors p-2 rounded-full z-50">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+
+            <!-- Two-Column Layout for Desktop -->
+            <div class="grid grid-cols-1 md:grid-cols-2">
+                <!-- Left Side: Image (Hidden on mobile) -->
+                <div class="hidden md:block">
+                    <img src="https://images.unsplash.com/photo-1543886475-680c10a18776?q=80&w=1500&auto=format&fit=crop"
+                        alt="Design Consultation Blueprint" class="w-full h-full object-cover rounded-l-xl"
+                        onerror="this.onerror=null; this.src='https://placehold.co/1500x1200/0F0F0F/F5F5F0?text=FREE+CONSULT';" />
+                </div>
+
+                <!-- Right Side: Content -->
+                <div class="p-8 md:p-12 text-[var(--color-dark)] text-center md:text-left">
+                    <i data-lucide="wrench-screwdriver"
+                        class="w-10 h-10 text-[var(--color-accent)] mx-auto md:mx-0 mb-4"></i>
+
+                    <h3 class="text-3xl font-display font-bold text-[var(--color-dark)] mb-3">
+                        Project Kick-off Offer
+                    </h3>
+
+                    <p class="text-gray-600 mb-6 leading-relaxed">
+                        Start your journey with Mechanix. Book a **free, 30-minute virtual consultation** with our lead
+                        designer to discuss the blueprint of your ideal space.
+                    </p>
+
+                    <!-- CTA Button with updated text -->
+                    <a href="#contact" id="modal-cta-btn"
+                        class="inline-block bg-[var(--color-accent)] text-white px-8 py-3 rounded-full text-sm font-bold uppercase tracking-widest hover:bg-[#c2303a] transition-all duration-300 shadow-lg mt-4">
+                        Book Now
+                    </a>
+
+                    <p class="text-xs text-gray-400 mt-4">
+                        Limited slots available this week.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 transition-all duration-300 pt-6">
+        <div
+            class="max-w-7xl mx-auto px-6 md:px-10 py-4 flex justify-between items-center bg-white rounded-full shadow-xl">
+            <!-- Logo --><a href="#"
+                class="text-2xl md:text-3xl font-display font-extrabold tracking-tighter z-50 relative text-[var(--color-dark)]">
+                MECHANIX.
+            </a>
+
+            <!-- Centered Desktop Links (ORDER: Home, Studio, Services, Portfolio, Company, Careers, Clients, Tips) -->
+            <div class="hidden md:flex space-x-8 items-center text-sm font-medium text-gray-700">
+                <a href="#" class="text-[var(--color-accent)]">Home</a> <!-- Active link -->
+                <a href="#about" class="hover:text-[var(--color-dark)] transition-colors">Studio</a>
+                <a href="#services" class="hover:text-[var(--color-dark)] transition-colors">Services</a>
+                <a href="#projects" class="hover:text-[var(--color-dark)] transition-colors">Portfolio</a>
+                <a href="#company" class="hover:text-[var(--color-dark)] transition-colors">Company</a>
+                <a href="#careers" class="hover:text-[var(--color-dark)] transition-colors">Careers</a>
+                <a href="#clients" class="hover:text-[var(--color-dark)] transition-colors">Clients</a>
+                <a href="#tips" class="hover:text-[var(--color-dark)] transition-colors">Tips</a>
+            </div>
+
+            <!-- Right Side Icons & Button -->
+            <div class="hidden md:flex items-center space-x-6">
+                <i data-lucide="search" class="w-5 h-5 text-gray-600 hover:text-[var(--color-dark)] cursor-pointer"></i>
+                <a href="https://www.facebook.com/mechanixinterior" target="_blank" rel="noopener noreferrer">
+                    <i data-lucide="facebook"
+                        class="w-5 h-5 text-gray-600 hover:text-[var(--color-dark)] cursor-pointer"></i>
+                </a>
+                <a href="#contact"
+                    class="px-6 py-3 bg-[var(--color-dark)] text-white rounded-full text-xs font-medium hover:bg-gray-800 transition-all duration-300 uppercase tracking-wider shadow-lg hover:shadow-xl">
+                    Get in Touch
+                </a>
+            </div>
+
+            <!-- Mobile Menu Button --><button id="menu-btn"
+                class="md:hidden z-50 text-[var(--color-dark)] focus:outline-none">
+                <i data-lucide="menu" class="w-8 h-8"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu Overlay (ORDER: Home, Studio, Services, Portfolio, Company, Careers, Clients, Tips) -->
+    <div id="mobile-menu-overlay"
+        class="fixed inset-0 bg-[var(--color-dark)] z-40 transform translate-x-full flex flex-col justify-center items-center space-y-8 text-white text-center">
+        <a href="#"
+            class="text-4xl font-display font-bold hover:text-[var(--color-accent)] transition-colors mobile-link">Home</a>
+        <a href="#about"
+            class="text-4xl font-display font-bold hover:text-[var(--color-accent)] transition-colors mobile-link">Studio</a>
+        <a href="#services"
+            class="text-4xl font-display font-bold hover:text-[var(--color-accent)] transition-colors mobile-link">Services</a>
+        <a href="#projects"
+            class="text-4xl font-display font-bold hover:text-[var(--color-accent)] transition-colors mobile-link">Portfolio</a>
+        <a href="#company"
+            class="text-4xl font-display font-bold hover:text-[var(--color-accent)] transition-colors mobile-link">Company</a>
+        <a href="#careers"
+            class="text-4xl font-display font-bold hover:text-[var(--color-accent)] transition-colors mobile-link">Careers</a>
+        <a href="#clients"
+            class="text-4xl font-display font-bold hover:text-[var(--color-accent)] transition-colors mobile-link">Clients</a>
+        <a href="#tips"
+            class="text-4xl font-display font-bold hover:text-[var(--color-accent)] transition-colors mobile-link">Tips</a>
+        <a href="#contact"
+            class="text-4xl font-display font-bold hover:text-[var(--color-accent)] transition-colors mobile-link">Contact</a>
+    </div>
+
+    <!-- Hero Section -->
+    <header class="relative h-screen w-full flex items-center justify-center overflow-hidden">
+        <!-- Background Image with Parallax feel -->
+        <div class="absolute inset-0 z-0">
+            <img src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=2800&auto=format&fit=crop"
+                alt="Mechanix Interior Design" class="w-full h-full object-cover filter brightness-[0.6]"
+                onerror="this.onerror=null; this.src='https://placehold.co/2800x1600/0F0F0F/F5F5F0?text=MECHANIX+HERO';">
+        </div>
+
+        <!-- Content -->
+        <div class="relative z-10 text-center px-4 max-w-5xl mx-auto">
+            <p class="text-white/80 uppercase tracking-[0.2em] text-sm md:text-base mb-4 fade-up">Interior Architecture
+                & Design</p>
+            <h1 class="text-5xl md:text-7xl lg:text-9xl font-display font-bold text-white leading-[0.9] tracking-tight mb-8 fade-up"
+                style="transition-delay: 100ms;">
+                ENGINEERING <br><span
+                    class="text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400">AESTHETICS</span>
+            </h1>
+            <div class="fade-up" style="transition-delay: 200ms;">
+                <a href="#projects"
+                    class="inline-flex items-center gap-2 text-white border-b border-white pb-1 hover:text-[var(--color-accent)] hover:border-[var(--color-accent)] transition-all duration-300 uppercase tracking-widest text-xs md:text-sm">
+                    View Selected Works <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                </a>
+            </div>
+        </div>
+
+        <!-- Scroll Indicator -->
+        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
+            <i data-lucide="arrow-down" class="text-white w-6 h-6"></i>
+        </div>
+    </header>
+
+    <!-- About / Philosophy Section -->
+    <section id="about" class="py-24 md:py-32 bg-[var(--color-light)] px-6">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <div class="fade-up">
+                <h4 class="text-[var(--color-accent)] font-bold tracking-widest uppercase mb-4 text-sm">About Mechanix
+                </h4>
+                <h2 class="text-4xl md:text-6xl font-display font-bold leading-tight mb-8 text-[var(--color-dark)]">
+                    Precision in <br> every detail, <br> luxury in every corner.
+                </h2>
+                <p class="text-gray-600 leading-relaxed text-lg mb-8 font-light">
+                    At Mechanix Interior, we believe a space is a machine for living. We combine technical precision
+                    with modern aesthetics to create functional, breathtaking interiors. From corporate hubs to luxury
+                    residences, we engineer the perfect atmosphere for your lifestyle.
+                </p>
+                <div class="flex gap-12 border-t border-gray-300 pt-8">
+                    <div>
+                        <span class="block text-4xl font-display font-bold text-[var(--color-dark)]">50+</span>
+                        <span class="text-sm text-gray-500 uppercase tracking-wider">Clients</span>
+                    </div>
+                    <div>
+                        <span class="block text-4xl font-display font-bold text-[var(--color-dark)]">100%</span>
+                        <span class="text-sm text-gray-500 uppercase tracking-wider">Satisfaction</span>
+                    </div>
+                    <div>
+                        <span class="block text-4xl font-display font-bold text-[var(--color-dark)]">5+</span>
+                        <span class="text-sm text-gray-500 uppercase tracking-wider">Years Exp.</span>
+                    </div>
+                </div>
+            </div>
+            <div class="relative h-[600px] w-full fade-up image-hover-zoom" style="transition-delay: 100ms;">
+                <img src="https://images.unsplash.com/photo-1497366811353-6870744d04b2?q=80&w=2301&auto=format&fit=crop"
+                    alt="Mechanix Office Design" class="w-full h-full object-cover rounded-md shadow-xl"
+                    onerror="this.onerror=null; this.src='https://placehold.co/2301x1534/E63946/0F0F0F?text=STUDIO+OFFICE';">
+
+                <!-- Architectural Detail image box -->
+                <div
+                    class="absolute -bottom-8 -left-8 bg-white p-4 shadow-2xl rounded-lg hidden lg:block max-w-xs border-t-4 border-[var(--color-accent)]">
+                    <h5 class="text-sm uppercase font-bold text-gray-500 mb-2">Architectural Detail</h5>
+                    <img src="https://images.unsplash.com/photo-1594754700010-fa37f37475d4?q=80&w=500&auto=format&fit=crop"
+                        alt="Close-up of modern geometric wall paneling"
+                        class="w-full h-32 object-cover rounded-md border border-gray-100"
+                        onerror="this.onerror=null; this.src='https://placehold.co/500x300/1F2937/ffffff?text=DETAIL';">
+                    <p class="text-xs text-gray-500 mt-2 text-center">Precision planning.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="py-24 bg-[var(--color-dark)] text-white">
+        <div class="max-w-7xl mx-auto px-6">
+            <div
+                class="flex flex-col md:flex-row justify-between items-end mb-20 border-b border-white/10 pb-8 fade-up">
+                <h2 class="text-4xl md:text-5xl font-display font-bold">Our Expertise</h2>
+                <p class="text-gray-400 max-w-md mt-4 md:mt-0 md:text-right text-left">Tailored interior solutions for
+                    commercial, residential, and hospitality sectors.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-px bg-white/10 border border-white/10">
+                <!-- Service 1 -->
+                <div
+                    class="bg-[var(--color-dark)] p-12 group hover:bg-[#1a1a1a] transition-colors duration-500 fade-up">
+                    <div
+                        class="w-12 h-12 bg-[var(--color-accent)] rounded-lg flex items-center justify-center mb-8 group-hover:scale-105 transition-transform shadow-lg">
+                        <i data-lucide="home" class="text-white w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-2xl font-display font-bold mb-4">Residential</h3>
+                    <p class="text-gray-400 leading-relaxed">
+                        Transforming houses into homes. We specialize in modern luxury apartments, duplexes, and private
+                        villas.
+                    </p>
+                </div>
+
+                <!-- Service 2 -->
+                <div class="bg-[var(--color-dark)] p-12 group hover:bg-[#1a1a1a] transition-colors duration-500 fade-up"
+                    style="transition-delay: 100ms;">
+                    <div
+                        class="w-12 h-12 bg-[var(--color-accent)] rounded-lg flex items-center justify-center mb-8 group-hover:scale-105 transition-transform shadow-lg">
+                        <i data-lucide="briefcase" class="text-white w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-2xl font-display font-bold mb-4">Commercial</h3>
+                    <p class="text-gray-400 leading-relaxed">
+                        Designing productive workspaces. Corporate offices, retail outlets, and showrooms that reflect
+                        your brand identity.
+                    </p>
+                </div>
+
+                <!-- Service 3 -->
+                <div class="bg-[var(--color-dark)] p-12 group hover:bg-[#1a1a1a] transition-colors duration-500 fade-up"
+                    style="transition-delay: 200ms;">
+                    <div
+                        class="w-12 h-12 bg-[var(--color-accent)] rounded-lg flex items-center justify-center mb-8 group-hover:scale-105 transition-transform shadow-lg">
+                        <i data-lucide="layout-template" class="text-white w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-2xl font-display font-bold mb-4">Consultancy</h3>
+                    <p class="text-gray-400 leading-relaxed">
+                        Space planning, 3D visualization, and turnkey project management from concept to completion.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Selected Projects (Masonry-ish Layout) -->
+    <section id="projects" class="py-24 md:py-32 px-4 md:px-6 bg-[var(--color-light)]">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-12 fade-up">
+                <h2 class="text-4xl md:text-6xl font-display font-bold text-[var(--color-dark)]">Featured Projects</h2>
+                <p class="text-gray-500 mt-4 tracking-wide">EXPLORE OUR RECENT WORK</p>
+            </div>
+
+            <!-- Project Categories/Filter List -->
+            <div class="fade-up mb-16 overflow-x-auto whitespace-nowrap pb-4 md:pb-0 scrollbar-hide">
+                <div class="inline-flex gap-3 md:gap-4 justify-center w-full">
+                    <button
+                        class="category-btn bg-[var(--color-dark)] text-white px-5 py-2 text-sm rounded-full font-bold uppercase tracking-widest hover:bg-[var(--color-accent)] transition-colors duration-300 shadow-lg whitespace-nowrap">All
+                        Projects</button>
+                    <button
+                        class="category-btn border border-gray-300 text-gray-700 px-5 py-2 text-sm rounded-full font-medium hover:bg-gray-100 transition-colors duration-300 whitespace-nowrap">Residential</button>
+                    <button
+                        class="category-btn border border-gray-300 text-gray-700 px-5 py-2 text-sm rounded-full font-medium hover:bg-gray-100 transition-colors duration-300 whitespace-nowrap">Commercial</button>
+                    <button
+                        class="category-btn border border-gray-300 text-gray-700 px-5 py-2 text-sm rounded-full font-medium hover:bg-gray-100 transition-colors duration-300 whitespace-nowrap">Restaurant</button>
+                    <button
+                        class="category-btn border border-gray-300 text-gray-700 px-5 py-2 text-sm rounded-full font-medium hover:bg-gray-100 transition-colors duration-300 whitespace-nowrap">Hotel
+                        & Resort</button>
+                    <button
+                        class="category-btn border border-gray-300 text-gray-700 px-5 py-2 text-sm rounded-full font-medium hover:bg-gray-100 transition-colors duration-300 whitespace-nowrap">Duplex</button>
+                    <button
+                        class="category-btn border border-gray-300 text-gray-700 px-5 py-2 text-sm rounded-full font-medium hover:bg-gray-100 transition-colors duration-300 whitespace-nowrap">Architecture</button>
+                    <button
+                        class="category-btn border border-gray-300 text-gray-700 px-5 py-2 text-sm rounded-full font-medium hover:bg-gray-100 transition-colors duration-300 whitespace-nowrap">Construction</button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Project 1 (Large) -->
+                <div class="group cursor-pointer fade-up">
+                    <div
+                        class="relative overflow-hidden h-[400px] md:h-[600px] mb-4 image-hover-zoom rounded-lg shadow-md">
+                        <div class="absolute inset-0 bg-black/20 group-hover:bg-black/0 transition-colors z-10"></div>
+                        <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2940&auto=format&fit=crop"
+                            alt="Modern House"
+                            class="w-full h-full object-cover transform transition-transform duration-700"
+                            onerror="this.onerror=null; this.src='https://placehold.co/2940x1960/60A5FA/ffffff?text=RESIDENCE+1';">
+                        <div
+                            class="absolute top-6 right-6 bg-white text-[var(--color-dark)] text-xs font-bold px-3 py-1 uppercase tracking-widest z-20 rounded-full">
+                            Residence</div>
+                    </div>
+                    <h3
+                        class="text-2xl font-display font-bold group-hover:text-[var(--color-accent)] transition-colors">
+                        Gulshan Avenue Residence</h3>
+                    <p class="text-gray-500">Dhaka, Bangladesh</p>
+                </div>
+
+                <!-- Project 2 -->
+                <div class="group cursor-pointer mt-0 md:mt-24 fade-up" style="transition-delay: 100ms;">
+                    <div
+                        class="relative overflow-hidden h-[400px] md:h-[500px] mb-4 image-hover-zoom rounded-lg shadow-md">
+                        <div class="absolute inset-0 bg-black/20 group-hover:bg-black/0 transition-colors z-10"></div>
+                        <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=2906&auto=format&fit=crop"
+                            alt="Interior"
+                            class="w-full h-full object-cover transform transition-transform duration-700"
+                            onerror="this.onerror=null; this.src='https://placehold.co/2906x1937/4ADE80/0F0F0F?text=CORPORATE+HUB';">
+                        <div
+                            class="absolute top-6 right-6 bg-white text-[var(--color-dark)] text-xs font-bold px-3 py-1 uppercase tracking-widest z-20 rounded-full">
+                            Corporate</div>
+                    </div>
+                    <h3
+                        class="text-2xl font-display font-bold group-hover:text-[var(--color-accent)] transition-colors">
+                        Banani Corporate Hub</h3>
+                    <p class="text-gray-500">Dhaka, Bangladesh</p>
+                </div>
+
+                <!-- Project 3 (HOSPITALITY - NOW WITH IMAGE) -->
+                <div class="group cursor-pointer fade-up">
+                    <div
+                        class="relative overflow-hidden h-[400px] md:h-[500px] mb-4 image-hover-zoom rounded-lg shadow-md">
+                        <div class="absolute inset-0 bg-black/20 group-hover:bg-black/0 transition-colors z-10"></div>
+                        <img src="https://images.unsplash.com/photo-1571003463777-742718131e5c?q=80&w=2940&auto=format&fit=crop"
+                            alt="Luxury Hotel Lobby"
+                            class="w-full h-full object-cover transform transition-transform duration-700"
+                            onerror="this.onerror=null; this.src='https://placehold.co/2940x1960/FCD34D/0F0F0F?text=HOSPITALITY+LOUNGE';">
+                        <div
+                            class="absolute top-6 right-6 bg-white text-[var(--color-dark)] text-xs font-bold px-3 py-1 uppercase tracking-widest z-20 rounded-full">
+                            Hospitality</div>
+                    </div>
+                    <h3
+                        class="text-2xl font-display font-bold group-hover:text-[var(--color-accent)] transition-colors">
+                        Uttara Signature Lounge</h3>
+                    <p class="text-gray-500">Uttara, Dhaka</p>
+                </div>
+
+                <!-- Project 4 -->
+                <div class="group cursor-pointer mt-0 md:mt-24 fade-up" style="transition-delay: 100ms;">
+                    <div
+                        class="relative overflow-hidden h-[400px] md:h-[600px] mb-4 image-hover-zoom rounded-lg shadow-md">
+                        <div class="absolute inset-0 bg-black/20 group-hover:bg-black/0 transition-colors z-10"></div>
+                        <img src="https://images.unsplash.com/photo-1606744824163-985d376605aa?q=80&w=2832&auto=format&fit=crop"
+                            alt="Loft" class="w-full h-full object-cover transform transition-transform duration-700"
+                            onerror="this.onerror=null; this.src='https://placehold.co/2832x1888/FB7185/ffffff?text=PENTHOUSE+LOFT';">
+                        <div
+                            class="absolute top-6 right-6 bg-white text-[var(--color-dark)] text-xs font-bold px-3 py-1 uppercase tracking-widest z-20 rounded-full">
+                            Apartment</div>
+                    </div>
+                    <h3
+                        class="text-2xl font-display font-bold group-hover:text-[var(--color-accent)] transition-colors">
+                        Dhanmondi Penthouse</h3>
+                    <p class="text-gray-500">Dhanmondi, Dhaka</p>
+                </div>
+
+                <!-- Project 5 (HOSPITALITY) -->
+                <div class="group cursor-pointer fade-up" style="transition-delay: 200ms;">
+                    <div
+                        class="relative overflow-hidden h-[400px] md:h-[500px] mb-4 image-hover-zoom rounded-lg shadow-md">
+                        <div class="absolute inset-0 bg-black/20 group-hover:bg-black/0 transition-colors z-10"></div>
+                        <img src="https://images.unsplash.com/photo-1549488344-9d5879a953e5?q=80&w=2940&auto=format&fit=crop"
+                            alt="Resort Spa Interior"
+                            class="w-full h-full object-cover transform transition-transform duration-700"
+                            onerror="this.onerror=null; this.src='https://placehold.co/2940x1960/FBBF24/0F0F0F?text=LAKESIDE+SPA';">
+                        <div
+                            class="absolute top-6 right-6 bg-white text-[var(--color-dark)] text-xs font-bold px-3 py-1 uppercase tracking-widest z-20 rounded-full">
+                            Hospitality</div>
+                    </div>
+                    <h3
+                        class="text-2xl font-display font-bold group-hover:text-[var(--color-accent)] transition-colors">
+                        Lakeside Resort Spa</h3>
+                    <p class="text-gray-500">Cox's Bazar, Bangladesh</p>
+                </div>
+
+            </div>
+
+            <div class="mt-16 text-center">
+                <a href="https://www.facebook.com/mechanixinterior" target="_blank"
+                    class="border border-[var(--color-dark)] px-8 py-4 uppercase tracking-widest text-xs font-bold hover:bg-[var(--color-dark)] hover:text-white transition-all duration-300 rounded-full shadow-md hover:shadow-xl">See
+                    More on Facebook</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Video / Parallax Break -->
+    <section class="relative h-[60vh] flex items-center justify-center bg-fixed bg-center bg-cover"
+        style="background-image: url('https://images.unsplash.com/photo-1505577058444-a3dab90d4253?q=80&w=2800&auto=format&fit=crop');">
+        <div class="absolute inset-0 bg-black/50"></div>
+        <div class="relative z-10 text-center">
+            <div
+                class="w-20 h-20 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center mx-auto mb-6 cursor-pointer hover:scale-110 transition-transform border border-white/30">
+                <i data-lucide="play" class="text-white fill-white ml-1"></i>
+            </div>
+            <h2 class="text-3xl md:text-5xl font-display font-bold text-white">The Mechanix Process</h2>
+        </div>
+    </section>
+
+    <!-- Contact / Footer -->
+    <section id="contact" class="bg-[#111] text-white pt-24 pb-12">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 mb-20">
+                <div class="fade-up">
+                    <h2 class="text-5xl md:text-7xl font-display font-bold mb-8">Let's renovate <br> your <span
+                            class="text-[var(--color-accent)]">world.</span></h2>
+                    <p class="text-gray-400 text-lg max-w-md mb-8">
+                        Ready to transform your space? Contact Mechanix Interior for a consultation.
+                    </p>
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-4">
+                            <div
+                                class="w-10 h-10 bg-[#222] flex items-center justify-center rounded-full text-[var(--color-accent)]">
+                                <i data-lucide="map-pin" class="w-5 h-5"></i>
+                            </div>
+                            <span class="text-lg">Dhaka, Bangladesh</span>
+                        </div>
+
+                        <!-- NEW: Phone Number -->
+                        <div class="flex items-center gap-4">
+                            <div
+                                class="w-10 h-10 bg-[#222] flex items-center justify-center rounded-full text-[var(--color-accent)]">
+                                <i data-lucide="phone" class="w-5 h-5"></i>
+                            </div>
+                            <a href="tel:+8801711XXXXXX"
+                                class="text-lg hover:text-[var(--color-accent)] transition-colors">+880 1711-XXXXXX</a>
+                        </div>
+                        <!-- END NEW -->
+
+                        <div class="flex items-center gap-4">
+                            <div
+                                class="w-10 h-10 bg-[#222] flex items-center justify-center rounded-full text-[var(--color-accent)]">
+                                <i data-lucide="facebook" class="w-5 h-5"></i>
+                            </div>
+                            <a href="https://www.facebook.com/mechanixinterior" target="_blank"
+                                class="text-lg hover:text-[var(--color-accent)] transition-colors">facebook.com/mechanixinterior</a>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div
+                                class="w-10 h-10 bg-[#222] flex items-center justify-center rounded-full text-[var(--color-accent)]">
+                                <i data-lucide="mail" class="w-5 h-5"></i>
+                            </div>
+                            <span class="text-lg">info@mechanixinterior.com</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Simple Form -->
+                <div class="bg-[#1a1a1a] p-8 md:p-12 rounded-xl fade-up relative" style="transition-delay: 100ms;">
+                    <form id="contact-form" class="space-y-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label for="name"
+                                    class="block text-xs uppercase tracking-widest text-gray-500 mb-2">Name</label>
+                                <input type="text" id="name" required
+                                    class="form-input w-full bg-transparent border-b border-gray-700 py-2 text-white focus:outline-none transition-colors"
+                                    placeholder="Your Name">
+                            </div>
+                            <div>
+                                <label for="phone"
+                                    class="block text-xs uppercase tracking-widest text-gray-500 mb-2">Phone</label>
+                                <input type="tel" id="phone" required
+                                    class="form-input w-full bg-transparent border-b border-gray-700 py-2 text-white focus:outline-none transition-colors"
+                                    placeholder="+880 1XXX-XXXXXX">
+                            </div>
+                        </div>
+                        <div>
+                            <label for="project"
+                                class="block text-xs uppercase tracking-widest text-gray-500 mb-2">Project Type</label>
+                            <select id="project" required
+                                class="form-input w-full bg-transparent border-b border-gray-700 py-2 text-white focus:outline-none transition-colors">
+                                <option value="" disabled selected class="bg-[#1a1a1a] text-gray-500">Select a project
+                                    type</option>
+                                <option class="bg-[#1a1a1a]">Residential Interior</option>
+                                <option class="bg-[#1a1a1a]">Commercial/Office</option>
+                                <option class="bg-[#1a1a1a]">Renovation</option>
+                                <option class="bg-[#1a1a1a]">Furniture Design</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="message"
+                                class="block text-xs uppercase tracking-widest text-gray-500 mb-2">Message</label>
+                            <textarea id="message" rows="4" required
+                                class="form-input w-full bg-transparent border-b border-gray-700 py-2 text-white focus:outline-none transition-colors resize-none"
+                                placeholder="Tell us about your space..."></textarea>
+                        </div>
+                        <button type="submit" id="submit-btn"
+                            class="bg-[var(--color-accent)] text-white px-8 py-3 uppercase font-bold tracking-widest text-xs hover:bg-white hover:text-[var(--color-accent)] transition-all duration-300 w-full md:w-auto rounded-full shadow-lg hover:shadow-xl">
+                            Send Inquiry
+                        </button>
+                    </form>
+
+                    <!-- Success Message Box (Hidden by default) -->
+                    <div id="success-message"
+                        class="absolute inset-0 bg-green-700/95 backdrop-blur-sm flex items-center justify-center flex-col p-8 rounded-xl opacity-0 pointer-events-none transition-opacity duration-500">
+                        <i data-lucide="check-circle" class="w-16 h-16 text-white mb-4"></i>
+                        <h3 class="text-3xl font-display font-bold text-white mb-2">Inquiry Sent!</h3>
+                        <p class="text-white/80 text-center">Thank you! We've received your message and will be in touch
+                            shortly to discuss your project.</p>
+                        <button id="close-success"
+                            class="mt-6 bg-white text-green-700 px-6 py-2 rounded-full text-xs font-bold uppercase hover:bg-gray-100 transition-colors">Close</button>
+                    </div>
+
+                </div>
+            </div>
+
+            <div
+                class="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center text-gray-500 text-sm">
+                <p>&copy; 2024 Mechanix Interior. All rights reserved.</p>
+                <div class="flex space-x-6 mt-4 md:mt-0">
+                    <a href="https://www.facebook.com/mechanixinterior"
+                        class="hover:text-white transition-colors">Facebook</a>
+                    <a href="#" class="hover:text-white transition-colors">Instagram</a>
+                    <a href="#" class="hover:text-white transition-colors">LinkedIn</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // --- MODAL LOGIC (Original, session-aware logic is restored) ---
+        const modalOverlay = document.getElementById('welcome-modal-overlay');
+        const modalContent = document.getElementById('welcome-modal-content');
+        const closeModalBtn = document.getElementById('close-modal-btn');
+        const modalCtaBtn = document.getElementById('modal-cta-btn');
+        // NOTE: The key is intentionally changed here to 'mechanix_visited_v2' so users who saw the first modal, will see this one.
+        const hasVisited = sessionStorage.getItem('mechanix_visited_v2');
+
+        const showModal = () => {
+            if (!hasVisited) {
+                // Delay the modal slightly for better user experience
+                setTimeout(() => {
+                    modalOverlay.classList.remove('modal-hidden');
+                    modalOverlay.classList.add('modal-visible');
+                    modalContent.classList.remove('modal-hidden');
+                    modalContent.classList.add('modal-visible');
+                    sessionStorage.setItem('mechanix_visited_v2', 'true'); // Set flag after showing
+                }, 500);
+            }
+        };
+
+        const hideModal = () => {
+            modalOverlay.classList.remove('modal-visible');
+            modalOverlay.classList.add('modal-hidden');
+            modalContent.classList.remove('modal-visible');
+            modalContent.classList.add('modal-hidden');
+        };
+
+        // Event listeners for closing the modal
+        closeModalBtn.addEventListener('click', hideModal);
+
+        // Hide modal when CTA is clicked and scroll to contact
+        modalCtaBtn.addEventListener('click', (event) => {
+            event.preventDefault();
+            hideModal();
+            document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
+        });
+
+        // Show the modal on load
+        window.onload = showModal;
+
+        // --- MOBILE MENU LOGIC ---
+        const menuBtn = document.getElementById('menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu-overlay');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+        let isMenuOpen = false;
+
+        const toggleMenu = () => {
+            isMenuOpen = !isMenuOpen;
+            if (isMenuOpen) {
+                mobileMenu.classList.remove('translate-x-full');
+                // Change icon to X
+                menuBtn.innerHTML = '<i data-lucide="x" class="w-8 h-8"></i>';
+            } else {
+                mobileMenu.classList.add('translate-x-full');
+                // Change icon back to Menu
+                menuBtn.innerHTML = '<i data-lucide="menu" class="w-8 h-8"></i>';
+            }
+            lucide.createIcons();
+        };
+
+        menuBtn.addEventListener('click', toggleMenu);
+
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                // Wait for the scroll to happen before closing the menu
+                setTimeout(() => {
+                    if (isMenuOpen) toggleMenu();
+                }, 100);
+            });
+        });
+
+        // Intersection Observer for Fade Up Animations
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target); // Only animate once
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-up').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Contact Form Submission Handler
+        const contactForm = document.getElementById('contact-form');
+        const successMessage = document.getElementById('success-message');
+        const closeSuccessBtn = document.getElementById('close-success');
+
+        contactForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+
+            // Simple form validation check (optional, but good practice)
+            if (contactForm.checkValidity()) {
+                // 1. Simulate API call success
+                console.log("Form data collected and ready to send. Displaying success message.");
+
+                // 2. Display success message
+                successMessage.classList.remove('pointer-events-none', 'opacity-0');
+                successMessage.classList.add('opacity-100');
+
+                // 3. Reset the form fields
+                contactForm.reset();
+            }
+        });
+
+        closeSuccessBtn.addEventListener('click', () => {
+            successMessage.classList.remove('opacity-100');
+            successMessage.classList.add('opacity-0', 'pointer-events-none');
+        });
+    </script>
+</body>
+
+</html>
