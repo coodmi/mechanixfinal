@@ -143,6 +143,11 @@ const mainNavItems: NavItem[] = [
         ],
     },
     {
+        title: 'Contact Page',
+        href: '/admin/contact-page',
+        icon: Send,
+    },
+    {
         title: 'Home Page Sections',
         href: '/admin/hero',
         icon: Home,

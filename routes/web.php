@@ -324,6 +324,37 @@ Route::get('/tips/{tip:slug}', [\App\Http\Controllers\TipsPageController::class,
 Route::get('/blogs', [\App\Http\Controllers\BlogPageController::class, 'index'])->name('blogs');
 Route::get('/blogs/{blog:slug}', [\App\Http\Controllers\BlogPageController::class, 'show'])->name('blogs.show');
 
+Route::get('/contact', function () {
+    return Inertia::render('contact', [
+        'navigation' => \App\Models\NavigationItem::active()->topLevel()->with(['children' => function ($query) {
+            $query->active()->orderBy('order');
+        }])->orderBy('order')->get(),
+        'siteSettings' => [
+            'logoUrl'       => \App\Models\SiteSetting::get('logo_url', '/logo.png'),
+            'logoVersion'   => \App\Models\SiteSetting::get('logo_version', time()),
+            'companyName'   => \App\Models\SiteSetting::get('company_name', 'MECHANIX.'),
+            'facebookUrl'   => \App\Models\SiteSetting::get('facebook_url', ''),
+            'instagramUrl'  => \App\Models\SiteSetting::get('instagram_url', ''),
+            'linkedinUrl'   => \App\Models\SiteSetting::get('linkedin_url', ''),
+            'copyrightText' => \App\Models\SiteSetting::get('copyright_text', '© 2025 Mechanix Interior. All rights reserved.'),
+        ],
+        'headerSettings' => [
+            'ctaButtonText' => \App\Models\SiteHeaderSetting::get('cta_button_text', 'Get in Touch'),
+            'ctaButtonLink' => \App\Models\SiteHeaderSetting::get('cta_button_link', '#contact'),
+            'socialLinks'   => \App\Models\SocialMediaLink::where('location', 'header')->orderBy('order')->get(),
+        ],
+        'contact'           => \App\Models\PageSection::where('section_key', 'contact')->with('contents')->first()?->getContentObject(),
+        'footerSocialLinks' => \App\Models\SocialMediaLink::where('location', 'footer')->orderBy('order')->get(),
+        'pageSettings' => [
+            'hero_title'           => \App\Models\SiteSetting::get('contact_page_hero_title',    'Contact Us'),
+            'hero_subtitle'        => \App\Models\SiteSetting::get('contact_page_hero_subtitle', "Have questions? We'd love to hear from you."),
+            'office_hours_mon_fri' => \App\Models\SiteSetting::get('contact_office_hours_mon_fri', 'Monday - Friday: 9:00 AM - 6:00 PM'),
+            'office_hours_sat'     => \App\Models\SiteSetting::get('contact_office_hours_sat',     'Saturday: 10:00 AM - 4:00 PM'),
+            'office_hours_sun'     => \App\Models\SiteSetting::get('contact_office_hours_sun',     'Sunday: Closed'),
+        ],
+    ]);
+})->name('contact.page');
+
 // Job Application Submission (Public)
 Route::post('/apply', [\App\Http\Controllers\JobApplicationController::class, 'store'])->name('apply');
 
@@ -512,6 +543,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
         // Contact Section
         Route::get('contact', [\App\Http\Controllers\Admin\ContactController::class, 'index'])->name('contact');
         Route::post('contact', [\App\Http\Controllers\Admin\ContactController::class, 'update'])->name('contact.update');
+
+        // Contact Page
+        Route::get('contact-page', [\App\Http\Controllers\Admin\ContactPageController::class, 'index'])->name('contact-page');
+        Route::post('contact-page', [\App\Http\Controllers\Admin\ContactPageController::class, 'update'])->name('contact-page.update');
 
         // Careers Management
         Route::get('careers', [\App\Http\Controllers\Admin\CareersController::class, 'index'])->name('careers');
