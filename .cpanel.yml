@@ -1,5 +1,8 @@
 ---
 deployment:
   tasks:
-    - export DEPLOYPATH=/home/nexgroup/mechanix.biz
-    - /bin/cp -R . $DEPLOYPATH
+    - export DEPLOYPATH=/home/nexgroup/mechanix.biz/
+    - /bin/cp -R * $DEPLOYPATH
+    - /usr/local/bin/php $DEPLOYPATH/artisan config:clear
+    - /usr/local/bin/php $DEPLOYPATH/artisan cache:clear
+    - /usr/local/bin/php $DEPLOYPATH/artisan view:clear
