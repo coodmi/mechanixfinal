@@ -8,6 +8,7 @@ import { Save, Upload, X } from 'lucide-react';
 import { FormEventHandler, useRef } from 'react';
 import { toast } from 'sonner';
 import { validateImageFile } from '@/lib/file-validation';
+import { assetUrl } from '@/lib/asset-url';
 
 interface AboutUsHeroQuoteProps {
     quote: {
@@ -22,9 +23,9 @@ export default function AboutUsHeroQuote({ quote }: AboutUsHeroQuoteProps) {
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     const form = useForm({
-        text: quote.text || 'Transforming spaces into timeless masterpieces.',
-        quote_highlight: quote.quote_highlight || 'timeless masterpieces',
-        author: quote.author || '- Mechanix Interior',
+        text: quote.text || '',
+        quote_highlight: quote.quote_highlight || '',
+        author: quote.author || '',
         background_image: null as File | null,
         background_image_url: quote.background_image || '',
     });
@@ -46,91 +47,106 @@ export default function AboutUsHeroQuote({ quote }: AboutUsHeroQuoteProps) {
     };
 
     const removeImage = () => {
-        form.setData({
-            ...form.data,
-            background_image: null,
-            background_image_url: '',
-        });
-        if (fileInputRef.current) {
-            fileInputRef.current.value = '';
-        }
+        form.setData({ ...form.data, background_image: null, background_image_url: '' });
+        if (fileInputRef.current) fileInputRef.current.value = '';
     };
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
         form.post('/admin/about-us-hero-quote', {
             forceFormData: true,
-            onSuccess: () => toast.success('Hero quote section updated successfully!'),
-            onError: () => toast.error('Failed to save. Please try again.')
+            onSuccess: () => toast.success('Hero section updated successfully!'),
+            onError: () => toast.error('Failed to save. Please try again.'),
         });
     };
+
+    // Build preview with highlight
+    const renderPreviewQuote = () => {
+        const text = form.data.text || 'Your quote will appear here...';
+        const highlight = form.data.quote_highlight;
+        if (!highlight) return <span>{text}</span>;
+        const parts = text.split(highlight);
+        if (parts.length < 2) return <span>{text}</span>;
+        return (
+            <>
+                {parts[0]}
+                <span className="text-blue-400">{highlight}</span>
+                {parts.slice(1).join(highlight)}
+            </>
+        );
+    };
+
+    const bgUrl = form.data.background_image_url
+        ? (form.data.background_image_url.startsWith('data:')
+            ? form.data.background_image_url
+            : assetUrl(form.data.background_image_url))
+        : '';
 
     return (
         <AppLayout breadcrumbs={[
             { title: 'About Us Page', href: '/admin/about-us' },
-            { title: 'Hero Quote', href: '/admin/about-us-hero-quote' }
+            { title: 'Hero Section', href: '/admin/about-us-hero-quote' },
         ]}>
-            <Head title="About Us - Hero Quote Section" />
+            <Head title="About Us - Hero Section" />
 
             <div className="p-4 max-w-4xl mx-auto w-full space-y-8">
-                <div className="flex items-center justify-between">
-                    <div>
-                        <h1 className="text-2xl font-bold tracking-tight">Hero Quote Section</h1>
-                        <p className="text-muted-foreground">
-                            Manage the hero quote section displayed at the top of the About Us page.
-                        </p>
-                    </div>
+                <div>
+                    <h1 className="text-2xl font-bold tracking-tight">Hero Section</h1>
+                    <p className="text-muted-foreground">
+                        Manage the full-width hero displayed at the top of the About Us page.
+                    </p>
                 </div>
 
                 <div className="bg-card rounded-xl border shadow-sm p-6">
                     <form onSubmit={submit} className="space-y-6">
+
+                        {/* Quote Text */}
                         <div className="space-y-2">
                             <Label htmlFor="text">Quote Text *</Label>
                             <Textarea
                                 id="text"
                                 value={form.data.text}
                                 onChange={(e) => form.setData('text', e.target.value)}
-                                placeholder="Enter an inspirational quote..."
-                                rows={4}
+                                placeholder="e.g. Design is not just what it looks like. Design is how it works."
+                                rows={3}
                             />
                             {form.errors.text && <p className="text-sm text-destructive">{form.errors.text}</p>}
                         </div>
 
+                        {/* Highlight */}
                         <div className="space-y-2">
-                            <Label htmlFor="quote_highlight">Quote Highlight</Label>
+                            <Label htmlFor="quote_highlight">Highlighted Phrase</Label>
                             <Input
                                 id="quote_highlight"
                                 value={form.data.quote_highlight}
                                 onChange={(e) => form.setData('quote_highlight', e.target.value)}
-                                placeholder="Part of the quote to highlight"
+                                placeholder="e.g. how it works"
                             />
                             <p className="text-xs text-muted-foreground">
-                                This text will be highlighted in blue color within the quote
+                                This exact phrase inside the quote will be highlighted in blue. Leave empty for no highlight.
                             </p>
                             {form.errors.quote_highlight && <p className="text-sm text-destructive">{form.errors.quote_highlight}</p>}
                         </div>
 
+                        {/* Author */}
                         <div className="space-y-2">
                             <Label htmlFor="author">Author</Label>
                             <Input
                                 id="author"
                                 value={form.data.author}
                                 onChange={(e) => form.setData('author', e.target.value)}
-                                placeholder="- Author Name"
+                                placeholder="e.g. Steve Jobs"
                             />
                             {form.errors.author && <p className="text-sm text-destructive">{form.errors.author}</p>}
                         </div>
 
+                        {/* Background Image */}
                         <div className="space-y-2">
                             <Label>Background Image</Label>
-                            <div className="flex flex-col gap-4">
-                                {form.data.background_image_url && (
+                            <div className="flex flex-col gap-3">
+                                {bgUrl && (
                                     <div className="relative w-full h-48 rounded-lg overflow-hidden border">
-                                        <img
-                                            src={form.data.background_image_url}
-                                            alt="Background preview"
-                                            className="w-full h-full object-cover"
-                                        />
+                                        <img src={bgUrl} alt="Background preview" className="w-full h-full object-cover" />
                                         <Button
                                             type="button"
                                             variant="destructive"
@@ -142,7 +158,7 @@ export default function AboutUsHeroQuote({ quote }: AboutUsHeroQuoteProps) {
                                         </Button>
                                     </div>
                                 )}
-                                <div className="flex items-center gap-2">
+                                <div>
                                     <Input
                                         ref={fileInputRef}
                                         type="file"
@@ -150,35 +166,29 @@ export default function AboutUsHeroQuote({ quote }: AboutUsHeroQuoteProps) {
                                         onChange={handleImageChange}
                                         className="hidden"
                                     />
-                                    <Button
-                                        type="button"
-                                        variant="outline"
-                                        onClick={() => fileInputRef.current?.click()}
-                                    >
+                                    <Button type="button" variant="outline" onClick={() => fileInputRef.current?.click()}>
                                         <Upload className="w-4 h-4 mr-2" />
-                                        {form.data.background_image_url ? 'Change Image' : 'Upload Image'}
+                                        {bgUrl ? 'Change Image' : 'Upload Image'}
                                     </Button>
                                 </div>
                             </div>
                             {form.errors.background_image && <p className="text-sm text-destructive">{form.errors.background_image}</p>}
                         </div>
 
+                        {/* Live Preview */}
                         <div className="border-t pt-6">
-                            <h3 className="text-md font-medium mb-4">Preview</h3>
-                            <div className="relative bg-gray-900 rounded-lg overflow-hidden p-8 text-white min-h-[200px] flex items-center justify-center">
-                                {form.data.background_image_url && (
-                                    <img
-                                        src={form.data.background_image_url}
-                                        alt=""
-                                        className="absolute inset-0 w-full h-full object-cover opacity-40"
-                                    />
-                                )}
-                                <div className="relative z-10 text-center space-y-4 max-w-2xl">
-                                    <blockquote className="text-xl md:text-2xl font-medium italic font-quote">
-                                        "{form.data.text || 'Your quote will appear here...'}"
+                            <h3 className="text-sm font-medium mb-3 text-muted-foreground uppercase tracking-wide">Live Preview</h3>
+                            <div
+                                className="relative rounded-lg overflow-hidden min-h-[220px] flex items-center justify-center text-white text-center"
+                                style={bgUrl ? { backgroundImage: `url(${bgUrl})`, backgroundSize: 'cover', backgroundPosition: 'center' } : { backgroundColor: '#111' }}
+                            >
+                                <div className="absolute inset-0 bg-black/65" />
+                                <div className="relative z-10 px-8 py-10 max-w-2xl space-y-4">
+                                    <blockquote className="text-xl md:text-2xl font-bold italic font-quote leading-snug">
+                                        "{renderPreviewQuote()}"
                                     </blockquote>
                                     {form.data.author && (
-                                        <p className="text-sm text-gray-300">{form.data.author}</p>
+                                        <p className="text-gray-300 text-sm">— {form.data.author.replace(/^[-–—]\s*/, '')}</p>
                                     )}
                                 </div>
                             </div>

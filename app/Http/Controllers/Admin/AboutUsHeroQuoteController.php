@@ -19,6 +19,7 @@ class AboutUsHeroQuoteController extends Controller
             ['is_active' => true, 'order' => 0]
         );
 
+        $section->load('contents');
         $content = $section->getContentObject();
 
         return Inertia::render('admin/about-us-hero-quote', [
@@ -47,22 +48,18 @@ class AboutUsHeroQuoteController extends Controller
 
         PageContent::updateOrCreate(
             ['section_id' => $section->id, 'key' => 'quote'],
-            ['value' => $validated['text'] ?? '', 'type' => 'text']
+            ['value' => $validated['text'], 'type' => 'text']
         );
 
-        if (isset($validated['quote_highlight'])) {
-            PageContent::updateOrCreate(
-                ['section_id' => $section->id, 'key' => 'quote_highlight'],
-                ['value' => $validated['quote_highlight'] ?? '', 'type' => 'text']
-            );
-        }
+        PageContent::updateOrCreate(
+            ['section_id' => $section->id, 'key' => 'quote_highlight'],
+            ['value' => $validated['quote_highlight'] ?? '', 'type' => 'text']
+        );
 
-        if (isset($validated['author'])) {
-            PageContent::updateOrCreate(
-                ['section_id' => $section->id, 'key' => 'author'],
-                ['value' => $validated['author'] ?? '', 'type' => 'text']
-            );
-        }
+        PageContent::updateOrCreate(
+            ['section_id' => $section->id, 'key' => 'author'],
+            ['value' => $validated['author'] ?? '', 'type' => 'text']
+        );
 
         if ($request->hasFile('background_image')) {
             $path = $request->file('background_image')->store('page-heroes', 'public');
