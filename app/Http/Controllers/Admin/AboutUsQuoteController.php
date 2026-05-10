@@ -19,6 +19,7 @@ class AboutUsQuoteController extends Controller
             ['is_active' => true, 'order' => 9]
         );
 
+        $section->load('contents');
         $content = $section->getContentObject();
 
         return Inertia::render('admin/about-us-quote', [
@@ -45,18 +46,31 @@ class AboutUsQuoteController extends Controller
             ['is_active' => true, 'order' => 9]
         );
 
-        foreach ($validated as $key => $value) {
-            if ($key === 'image' && $request->hasFile('image')) {
-                $path = $request->file('image')->store('about-us', 'public');
-                $value = Storage::url($path);
-            }
+        PageContent::updateOrCreate(
+            ['section_id' => $section->id, 'key' => 'text'],
+            ['value' => $validated['text'], 'type' => 'text']
+        );
 
-            if ($value !== null && ($key !== 'image' || $request->hasFile('image'))) {
-                PageContent::updateOrCreate(
-                    ['section_id' => $section->id, 'key' => $key],
-                    ['value' => $value ?? '', 'type' => 'text']
-                );
-            }
+        if (isset($validated['author'])) {
+            PageContent::updateOrCreate(
+                ['section_id' => $section->id, 'key' => 'author'],
+                ['value' => $validated['author'], 'type' => 'text']
+            );
+        }
+
+        if (isset($validated['author_title'])) {
+            PageContent::updateOrCreate(
+                ['section_id' => $section->id, 'key' => 'author_title'],
+                ['value' => $validated['author_title'], 'type' => 'text']
+            );
+        }
+
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('about-us', 'public');
+            PageContent::updateOrCreate(
+                ['section_id' => $section->id, 'key' => 'image'],
+                ['value' => Storage::url($path), 'type' => 'image']
+            );
         }
 
         AdminActivity::log('updated', 'PageSection', $section->id, null, 'Updated about us quote section');

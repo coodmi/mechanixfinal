@@ -182,7 +182,7 @@ Route::get('/careers', function () {
 
 Route::get('/about-us', function () {
     $sections = [
-        'page_hero', 'main', 'stats', 'ceo_vision', 'values', 'process', 'certificates', 'affiliations', 'cta'
+        'page_hero', 'main', 'stats', 'ceo_vision', 'quote', 'values', 'process', 'certificates', 'affiliations', 'cta'
     ];
     
     $data = [];

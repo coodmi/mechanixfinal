@@ -21,6 +21,7 @@ interface AboutUsProps extends CMSPageProps {
     main: any;
     stats: { items: PageItem[] };
     ceo_vision: any;
+    quote: { text: string; author: string; author_title: string; image: string } | null;
     values: { title: string; description: string; items: PageItem[] };
     process: { title: string; description: string; items: PageItem[] };
     certificates: { title: string; description: string; items: PageItem[] };
@@ -42,7 +43,7 @@ const IconMap: Record<string, any> = {
 };
 
 export default function AboutUs(props: AboutUsProps) {
-    const { page_hero, main, stats, ceo_vision, values, process, certificates, affiliations, cta } = props;
+    const { page_hero, main, stats, ceo_vision, quote, values, process, certificates, affiliations, cta } = props;
 
     const renderIcon = (iconName: string | undefined) => {
         if (!iconName || !IconMap[iconName]) return <CheckCircle2 className="w-6 h-6 text-primary" />;
@@ -150,6 +151,38 @@ export default function AboutUs(props: AboutUsProps) {
                                 )}
                             </motion.div>
                         </div>
+                    </section>
+                )}
+
+                {/* Quote Section */}
+                {quote?.text && (
+                    <section className="relative py-24 overflow-hidden">
+                        {quote.image && (
+                            <img
+                                src={assetUrl(quote.image)}
+                                alt=""
+                                className="absolute inset-0 w-full h-full object-cover"
+                            />
+                        )}
+                        <div className={`absolute inset-0 ${quote.image ? 'bg-black/60' : 'bg-gray-900'}`} />
+                        <motion.div
+                            className="relative z-10 container mx-auto px-4 text-center text-white max-w-4xl space-y-6"
+                            initial={{ opacity: 0, y: 30 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true, amount: 0.5 }}
+                            transition={{ duration: 0.7 }}
+                        >
+                            <blockquote className="text-2xl md:text-3xl font-medium italic font-quote leading-relaxed">
+                                "{quote.text}"
+                            </blockquote>
+                            {(quote.author || quote.author_title) && (
+                                <p className="text-sm text-gray-300 tracking-wide">
+                                    {quote.author && <span className="font-semibold">{quote.author}</span>}
+                                    {quote.author && quote.author_title && ' — '}
+                                    {quote.author_title && <span>{quote.author_title}</span>}
+                                </p>
+                            )}
+                        </motion.div>
                     </section>
                 )}
 
