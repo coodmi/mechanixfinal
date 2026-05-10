@@ -55,10 +55,6 @@ const mainNavItems: NavItem[] = [
                 title: 'Hero Section',
                 href: '/admin/about-us-hero-quote',
             },
-            {
-                title: 'Quote Section',
-                href: '/admin/about-us-quote',
-            },
         ],
     },
     {
