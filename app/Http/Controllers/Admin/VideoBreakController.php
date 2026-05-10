@@ -19,6 +19,8 @@ class VideoBreakController extends Controller
             ['page' => 'welcome', 'is_active' => true, 'order' => 6]
         );
 
+        $section->load('contents');
+
         return Inertia::render('admin/video-break', [
             'content' => $section->getContentObject(),
         ]);
@@ -27,7 +29,8 @@ class VideoBreakController extends Controller
     public function update(Request $request)
     {
         $validated = $request->validate([
-            'title' => 'nullable|string|max:255',
+            'title'            => 'nullable|string|max:255',
+            'video_url'        => 'nullable|string|max:500',
             'background_image' => 'nullable|image|max:5120',
         ]);
 
@@ -36,21 +39,28 @@ class VideoBreakController extends Controller
             ['page' => 'welcome', 'is_active' => true, 'order' => 6]
         );
 
-        foreach ($validated as $key => $value) {
-            if ($key === 'background_image' && $request->hasFile('background_image')) {
-                $path = $request->file('background_image')->store('video-break', 'public');
-                $value = Storage::url($path);
-                $key = 'background_image';
-            }
-
-            if ($value !== null && $key !== 'background_image' || ($key === 'background_image' && $request->hasFile('background_image'))) {
-                PageContent::updateOrCreate(
-                    ['section_id' => $section->id, 'key' => $key],
-                    ['value' => $value, 'type' => 'text']
-                );
-            }
+        if (array_key_exists('title', $validated)) {
+            PageContent::updateOrCreate(
+                ['section_id' => $section->id, 'key' => 'title'],
+                ['value' => $validated['title'] ?? '', 'type' => 'text']
+            );
         }
-        
+
+        if (array_key_exists('video_url', $validated)) {
+            PageContent::updateOrCreate(
+                ['section_id' => $section->id, 'key' => 'video_url'],
+                ['value' => $validated['video_url'] ?? '', 'type' => 'text']
+            );
+        }
+
+        if ($request->hasFile('background_image')) {
+            $path = $request->file('background_image')->store('video-break', 'public');
+            PageContent::updateOrCreate(
+                ['section_id' => $section->id, 'key' => 'background_image'],
+                ['value' => Storage::url($path), 'type' => 'image']
+            );
+        }
+
         AdminActivity::log('updated', 'PageSection', $section->id, null, 'Updated video break section');
 
         return redirect()->back();
