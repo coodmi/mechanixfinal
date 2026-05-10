@@ -151,6 +151,8 @@ function ItemsManager({ sectionId, items, sectionTitle }: { sectionId: number; i
         order: items.length + 1,
     });
 
+    const deleteForm = useForm({});
+
     const handleSubmit: FormEventHandler = (e) => {
         e.preventDefault();
         if (editingItem) {
@@ -189,7 +191,7 @@ function ItemsManager({ sectionId, items, sectionTitle }: { sectionId: number; i
     };
 
     const handleDelete = (itemId: number) => {
-        form.delete(route('our-team.items.destroy', itemId), {
+        deleteForm.delete(route('our-team.items.destroy', itemId), {
             onSuccess: () => {
                 toast.success('Item deleted');
                 setDeleteConfirmId(null);

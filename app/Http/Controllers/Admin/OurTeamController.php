@@ -32,8 +32,9 @@ class OurTeamController extends Controller
                 ['is_active' => true, 'order' => $order]
             );
 
+            $section->load('contents');
             $content = $section->getContentObject();
-            
+
             // Add section ID for frontend to use
             $content->section_id = $section->id;
 
