@@ -8,7 +8,7 @@ interface PageHeroProps {
 export default function PageHeroSection({ pageHero }: { pageHero?: PageHeroProps | null }) {
     const defaultQuote = "Design is not just what it looks like. Design is how it works.";
     const defaultHighlight = "how it works";
-    const defaultAuthor = "- Steve Jobs";
+    const defaultAuthor = "Steve Jobs";
     const defaultBg = "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=2000&auto=format&fit=crop";
 
     const quote = pageHero?.quote || defaultQuote;
@@ -36,7 +36,7 @@ export default function PageHeroSection({ pageHero }: { pageHero?: PageHeroProps
                     <span className="text-blue-500">{highlight}</span>
                     {afterHighlight}"
                 </h1>
-                <p className="mt-6 text-xl text-gray-400 font-quote">{author}</p>
+                <p className="mt-6 text-xl text-gray-400 font-quote">— {author}</p>
             </div>
         </section>
     );
