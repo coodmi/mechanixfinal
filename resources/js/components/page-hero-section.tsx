@@ -36,7 +36,7 @@ export default function PageHeroSection({ pageHero }: { pageHero?: PageHeroProps
                     <span className="text-blue-500">{highlight}</span>
                     {afterHighlight}"
                 </h1>
-                <p className="mt-6 text-xl text-gray-400 font-quote">— {author}</p>
+                <p className="mt-6 text-xl text-gray-400 font-quote">— {author.replace(/^[-–—]\s*/, '')}</p>
             </div>
         </section>
     );
