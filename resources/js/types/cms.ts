@@ -90,10 +90,13 @@ export interface FounderContent {
     title?: string;
     description?: string;
     founder_name?: string;
+    founder_title?: string;
     company_name?: string;
     main_image?: string;
     profile_image?: string;
+    quote?: string;
     cta_text?: string;
+    cta_link?: string;
 }
 
 export interface ContactContent {
