@@ -19,8 +19,6 @@ import { Save, Users, Upload, X, Plus, Pencil, Trash2 } from 'lucide-react';
 import { FormEventHandler, useRef, useState } from 'react';
 import { toast } from 'sonner';
 
-declare var route: any;
-
 interface PageItem {
     id: number;
     image?: string;
@@ -156,7 +154,7 @@ function ItemsManager({ sectionId, items, sectionTitle }: { sectionId: number; i
     const handleSubmit: FormEventHandler = (e) => {
         e.preventDefault();
         if (editingItem) {
-            form.post(route('our-team.items.update', editingItem.id), {
+            form.post(`/admin/our-team/items/${editingItem.id}`, {
                 forceFormData: true,
                 onSuccess: () => {
                     setIsOpen(false);
@@ -167,7 +165,7 @@ function ItemsManager({ sectionId, items, sectionTitle }: { sectionId: number; i
                 onError: () => toast.error('Failed to save. Please try again.'),
             });
         } else {
-            form.post(route('our-team.items.store'), {
+            form.post('/admin/our-team/items', {
                 forceFormData: true,
                 onSuccess: () => {
                     setIsOpen(false);
@@ -191,7 +189,7 @@ function ItemsManager({ sectionId, items, sectionTitle }: { sectionId: number; i
     };
 
     const handleDelete = (itemId: number) => {
-        deleteForm.delete(route('our-team.items.destroy', itemId), {
+        deleteForm.delete(`/admin/our-team/items/${itemId}`, {
             onSuccess: () => {
                 toast.success('Item deleted');
                 setDeleteConfirmId(null);
